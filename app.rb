@@ -171,7 +171,7 @@ def group_tickets(tickets, assets, default_asset)
       tickets: []
     }
 
-    story_points = ticket['fields']['customfield_10036'] || 0
+    story_points = ticket['fields']['customfield_10036'] || 1
     is_capexable = !ticket['fields']['issuetype']['name'].downcase.include?('bug')
 
     if is_capexable
