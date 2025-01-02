@@ -47,7 +47,9 @@ The Capexable Report application is a web-based tool designed to analyze Jira ti
    JIRA_PROJECT_KEY=your-project-key
    ```
 
-4. Start the application:
+4. Generate a jira api key: To generate a Jira API token, log into your Atlassian account, access your profile settings, navigate to "Security" and then select "Create and manage API tokens"; from there, click "Create API token", give it a descriptive label, and copy the generated token to use for your API interactions; remember to store this token securely as it acts like your password for API access. 
+
+5. Start the application:
 
    ```bash
    ruby app.rb
