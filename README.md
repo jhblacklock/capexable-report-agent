@@ -7,6 +7,7 @@ The Capexable Report application is a web-based tool designed to analyze Jira ti
 ## Features
 
 - Fetches Jira tickets based on user-defined criteria.
+- Calculates an asset group percentage based on story points.
 - Supports pagination for retrieving large sets of tickets.
 - Allows users to select assignees and specify date ranges.
 - Displays results in a user-friendly table format.
