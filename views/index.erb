@@ -1,0 +1,155 @@
+<!-- views/index.erb -->
+<style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center; 
+  margin-bottom: 20px;
+}
+
+form {
+  margin-bottom: 40px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"], 
+input[type="date"],
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc; 
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+.help-text {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 40px 0;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+</style>
+
+<h1>Capex Reporting Agent</h1>
+
+<section class="search-users">
+  <h2>Search Users</h2>
+  <form action="/search_users" method="post">
+    <label for="user_search">Search Users</label>
+    <input type="text" id="user_search" name="user_search">
+    <button type="submit">Search</button>
+    <p class="help-text">Search results will be displayed below.</p>
+    <label>Search Results</label>
+    <ul>
+      <% assignees.each do |assignee| %>
+        <li>
+          <%= assignee[:display_name] %>
+          <% if selected_assignees.any? { |a| a[:account_id] == assignee[:account_id] } %>
+            <button type="button" class="add-user-btn" data-account-id="<%= assignee[:account_id] %>" data-display-name="<%= assignee[:display_name] %>" disabled>Added</button>
+          <% else %>
+            <button type="button" class="add-user-btn" data-account-id="<%= assignee[:account_id] %>" data-display-name="<%= assignee[:display_name] %>">Add</button>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </form>
+</section>
+
+<hr>
+
+<section class="selected-users-analyze">
+  <h2>Selected Users</h2>
+  <ul id="selected-users">
+    <% if selected_assignees.empty? %>
+      <li>No selected users</li>
+    <% else %>
+      <% selected_assignees.each do |assignee| %>
+        <li>
+          <%= assignee[:display_name] %>
+          <button type="button" class="remove-user-btn" data-account-id="<%= assignee[:account_id] %>">Remove</button>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+
+  <h2>Analyze</h2>
+  <form action="/analyze" method="post">
+    <label for="default_asset">Default Asset:</label>
+    <select id="default_asset" name="default_asset">
+      <% assets.each do |asset| %>
+        <option value="<%= asset %>" <%= 'selected' if asset == default_asset %>><%= asset %></option>
+      <% end %>
+    </select>
+    <p class="help-text">The default asset will be used for tickets that don't match any of the defined assets.</p>
+
+    <label for="from_date">From Date</label>
+    <input type="date" id="from_date" name="from_date" value="<%= from_date %>" required>
+
+    <label for="to_date">To Date</label>
+    <input type="date" id="to_date" name="to_date" value="<%= to_date %>" required>
+    <div id="assignee-list">
+      <% selected_assignees.each do |assignee| %>
+        <input type="hidden" name="assignees[]" value="<%= assignee[:account_id] %>">
+      <% end %>
+    </div>
+
+    <button type="submit">Analyze</button>
+  </form>
+</section>
+
+<script src="/app.js"></script>

@@ -1,0 +1,124 @@
+<!-- views/results.erb -->
+<style>
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+td {
+  vertical-align: middle;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+td:nth-child(4) {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.back-link {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.copy-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-button:hover {
+  background-color: #0056b3;
+}
+</style>
+
+<a href="/" class="back-link">Back to Search</a>
+
+<h2>Results from <%= from_date %> to <%= to_date %></h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Engineer Name</th>
+      <th>Asset</th>
+      <th>Capex %</th>
+      <th>Supporting JQL</th>
+      <th>Ticket Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if results.empty? %>
+      <tr>
+        <td colspan="5">No tickets found matching the selected assignees and date range.</td>
+      </tr>
+    <% else %>
+      <% results.each do |result| %>
+        <tr>
+          <td><%= result[:engineer] %></td>
+          <td><%= result[:asset] %></td>
+          <td><%= result[:capex_percentage] %></td>
+          <td>
+            <button onclick="copyToClipboard('<%= result[:jql].gsub("'", "\\\\'") %>')" class="copy-button">Copy</button>
+            <a href="<%= settings.jira_base_url %>/issues/?jql=<%= URI.encode_www_form_component(result[:jql]) %>" target="_blank">
+              <%= result[:jql] %>
+            </a>
+          </td>
+          <td><%= result[:ticket_links] %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="key">
+  <p><span style="color: red;">●</span> Not included in capex because they are bugs.</p>
+</div>
+
+<script>
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('JQL copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }
+</script>
