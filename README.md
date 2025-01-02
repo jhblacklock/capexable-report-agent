@@ -38,7 +38,7 @@ The Capexable Report application is a web-based tool designed to analyze Jira ti
    bundle install
    ```
 
-3. Create a `.env` file in the root directory and add your Jira credentials:
+3. Create a `.env` file in the root directory and add your Jira credentials (copy from `.env.example`):
 
    ```plaintext
    JIRA_BASE_URL=https://your-jira-instance.atlassian.net
@@ -47,7 +47,15 @@ The Capexable Report application is a web-based tool designed to analyze Jira ti
    JIRA_PROJECT_KEY=your-project-key
    ```
 
-4. Generate a jira api key: To generate a Jira API token, log into your Atlassian account, access your profile settings, navigate to "Security" and then select "Create and manage API tokens"; from there, click "Create API token", give it a descriptive label, and copy the generated token to use for your API interactions; remember to store this token securely as it acts like your password for API access. 
+   Note: The `.env` file is ignored by Git (via `.gitignore`) for security reasons, as it may contain sensitive information. Each user of the project should create their own `.env` file locally.
+
+4. Set up the `config.yml` file:
+
+   - Copy the `config.example.yml` file to `config.yml`
+   - Open `config.yml` and replace the placeholder asset names with your own assets
+   - Save the updated `config.yml` file
+
+   Note: The `config.yml` file is ignored by Git (via `.gitignore`) for security reasons, as it may contain sensitive information. Each user of the project should create their own `config.yml` file locally.
 
 5. Start the application:
 
@@ -55,7 +63,7 @@ The Capexable Report application is a web-based tool designed to analyze Jira ti
    ruby app.rb
    ```
 
-5. Open your browser and navigate to `http://localhost:4567`.
+6. Open your browser and navigate to `http://localhost:4567`.
 
 ## Usage
 
@@ -64,10 +72,10 @@ The Capexable Report application is a web-based tool designed to analyze Jira ti
 3. Click the "Analyze" button to fetch and display the results.
 4. Review the results table, which includes the engineer name, asset, Capex percentage, supporting JQL, and ticket links.
 
-## Configuration
-
-The application uses a `config.yml` file to define the available assets. You can modify this file to add or remove assets as needed.
-
 ## Contributing
 
 Contributions are welcome! If you have suggestions for improvements or new features, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
